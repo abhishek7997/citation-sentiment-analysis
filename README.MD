@@ -11,7 +11,7 @@
 ![OUTPUT_1_CITATION_DATA](https://user-images.githubusercontent.com/68701271/182057475-8201c403-0d3a-477d-833d-b3b316a8f772.PNG)
 
 ### Citations extracted 
-![OUTPUT_2_RESULTS](https://user-images.githubusercontent.com/68701271/182057495-0dbf1e6c-3ac3-4289-9e49-fd5b47be6a2c.PNG
+![OUTPUT_2_RESULTS](https://user-images.githubusercontent.com/68701271/182057495-0dbf1e6c-3ac3-4289-9e49-fd5b47be6a2c.PNG)
 
 ### Predictions
     0 - Negative; 1 - Neutral; 2 - Positive
