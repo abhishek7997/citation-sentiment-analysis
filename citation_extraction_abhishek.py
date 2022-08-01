@@ -39,15 +39,6 @@ PAPERS = {
     # 'text7': "./abhishek/Learning sentiment specific word.pdf"
 }
 
-'''
-text1d = "./devanshu/Dont Even Look Once Synthesizing Features for Zero-Shot Detection.pdf"
-text2d = "./devanshu/DSSD Deconvolutional Single Shot Detector.pdf"
-text3d = "./devanshu/GC-YOLOv3 You Only Look Once with Global.pdf"
-text4d = "./devanshu/SSD Single Shot MultiBox Detector.pdf"
-text5d = "./devanshu/You Only Look Once.pdf"
-text6d = "./devanshu/You Only Look One-level Feature.pdf"
-'''
-
 OUTPUTFILE = "results_abhishek.txt"
 POSITIVE_WORDS_FILE = "positive-words.txt"
 NEGATIVE_WORDS_FILE = "negative-words.txt"
@@ -187,8 +178,8 @@ def getCitationsNLTK(text):
 def getCitationsLocations(text):
     '''Extract the starting and ending indices of all citations'''
     citation_locations = []
-    for string in CITATIONS_REGEX.finditer(text):
-        citation_locations.append((string.group(), string.span()))
+    for st in CITATIONS_REGEX.finditer(text):
+        citation_locations.append((st.group(), st.span()))
 
     return citation_locations
 
@@ -435,7 +426,7 @@ def getAdjectivesFromCitationsData(citations_data):
 def writeAdjectivesToCSV(adjectives_list):
     '''Save list of adjectives to a CSV file'''
     rows = zip(adjectives_list, [0]*len(ALL_ADJECTIVES))
-    with open('adjectives.csv', 'w', newline='') as csvfile:
+    with open('adjectives.csv', 'a', newline='') as csvfile:
         wr = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
         wr.writerow(("adjective", "score"))
         for row in rows:
@@ -481,6 +472,9 @@ NEGATIVE_WORDS = ReadFile(NEGATIVE_WORDS_FILE)
 
 ALL_CITATIONS = []
 ALL_ADJECTIVES = []
+
+open(f"{OUTPUTFILE}", 'w').close()
+open("default_sentiments.txt", 'w').close()
 
 for (_, currentText) in PAPERS.items():
     # pages = readPageTextIncremented(currentText)
