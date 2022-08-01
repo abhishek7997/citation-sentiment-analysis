@@ -28,6 +28,11 @@ from sklearn.svm import SVC
 import warnings
 warnings.filterwarnings('ignore')
 
+def write_to_file(test_data, predictions, name):
+    test_data["predictions"] = predictions
+    sub = test_data[["Citation Text", "predictions"]]
+    sub.to_csv(f"predictions_{name}.csv", index=False)
+
 # We must use multiclass classification algorithms as we have more than two classifications
 # Positive, Negative and Neutral classes
 # Use KNN, Naive Bayes, Decision Trees, Support Vector Machines, Random Forest, Gradient Boosting
@@ -36,8 +41,8 @@ dataset = pd.read_csv('citation_sentiment_corpus.csv',
                       usecols=['Sentiment', 'Citation'])
 citations = pd.read_csv('citations-data.csv', usecols=['Citation Text'])
 
-vectorizer = TfidfVectorizer(max_features=4246)
-vectorizer2 = TfidfVectorizer(max_features=4246)
+vectorizer = TfidfVectorizer(max_features=2048)
+vectorizer2 = TfidfVectorizer(max_features=2048)
 
 vectorizer.fit(dataset.iloc[:, -1].values)
 
@@ -82,6 +87,7 @@ print(
 logisticPredictions2 = logisticRegr.predict(testing)
 print(
     f"Logistic Regression Testing: {len(logisticPredictions2)} :: {(logisticPredictions2 == 1).sum()}\n")
+write_to_file(citations, logisticPredictions2, 'LOG')
 
 # K-Nearest Neighbours
 kClassifier = KNeighborsClassifier(n_neighbors=5, metric='minkowski', p=2)
@@ -91,6 +97,7 @@ print(f"KNN: {accuracy_score(y_test, knnPredictions)*100:.3f}%")
 knnPredictions2 = kClassifier.predict(testing)
 print(
     f"KNN Testing: {len(knnPredictions2)} :: {(knnPredictions2 == 1).sum()}\n")
+write_to_file(citations, knnPredictions2, 'KNN')
 
 NBclassifier = GaussianNB()
 NBclassifier.fit(X_train.todense(), y_train)
@@ -99,6 +106,7 @@ print(f"Naive Bayes: {accuracy_score(y_test, NBpredictions)*100:.3f}%")
 NBpredictions2 = NBclassifier.predict(testing.todense())
 print(
     f"Naive Bayes Testing: {len(NBpredictions2)} :: {(NBpredictions2 == 1).sum()}\n")
+write_to_file(citations, NBpredictions2, 'NB')
 
 DTclassifier = DecisionTreeClassifier(criterion='entropy', random_state=0)
 DTclassifier.fit(X_train, y_train)
@@ -107,6 +115,7 @@ print(f"Decision Tree: {accuracy_score(y_test, DTpredictions)*100:.3f}%")
 DTpredictions2 = DTclassifier.predict(testing.todense())
 print(
     f"Decision Tree Testing: {len(DTpredictions2)} :: {(DTpredictions2 == 1).sum()}\n")
+write_to_file(citations, DTpredictions2, 'DT')
 
 ETCclassifier = ExtraTreesClassifier(
     n_estimators=5, criterion='entropy', max_features=2)
@@ -117,7 +126,10 @@ print(
 ETCpredictions2 = ETCclassifier.predict(testing)
 print(
     f"ETC Classifier Testing: {len(ETCpredictions2)} :: {(ETCpredictions2 == 1).sum()}\n")
+write_to_file(citations, ETCpredictions2, 'ETC')
 
+'''
+# SVM is very slow compared to the rest
 SVMClassifier = SVC(gamma='auto')
 SVMClassifier.fit(X_train, y_train)
 SVMpredictions = SVMClassifier.predict(X_test)
@@ -126,6 +138,13 @@ print(
 SVMpredictions2 = SVMClassifier.predict(testing)
 print(
     f"SVM Testing: {len(SVMpredictions2)} :: {(SVMpredictions2 == 1).sum()}\n")
+write_to_file(citations, SVMpredictions2, 'SVM')
+'''
+
+'''
+for X,Y in zip(logisticPredictions,y_test):
+    print("Model Score:", X, "actual score:", Y)
+'''
 
 '''
 Output:
